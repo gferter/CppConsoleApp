@@ -1,5 +1,8 @@
 # Prerequisites
 *.d
+.bin
+.obj
+*.cbp
 
 # Compiled Object files
 *.slo
