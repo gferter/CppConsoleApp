@@ -3,6 +3,7 @@
 .bin
 .obj
 *.cbp
+*.depend
 
 # Compiled Object files
 *.slo
