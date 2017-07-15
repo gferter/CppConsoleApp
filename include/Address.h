@@ -7,6 +7,11 @@ class Address
     public:
         Address();
 
+        ~Address();
+
+        Address(const Address&);
+        const Address& operator=(const Address&);
+
         const char* lastname() const {return lastname_;}
         void lastname(const char*);
 
@@ -20,12 +25,12 @@ class Address
         void address(const char*);
 
     private:
-        enum {namelen = 16, phonelen = 16, addrlen = 100};
+        char* lastname_;
+        char* firstname_;
+        char* phone_;
+        char* address_;
 
-        char lastname_[namelen];
-        char firstname_[namelen];
-        char phone_[phonelen];
-        char address_[addrlen];
+        char* dup(const char* s);
 };
 
 #endif // ADDRESS_H
