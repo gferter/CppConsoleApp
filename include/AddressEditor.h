@@ -11,6 +11,7 @@ class AddressEditor : public Editor
         AddressEditor(const Address& a);
 
         bool edit();
+        bool editPhone(const std::string& prompt, std::string& phone);
         Address addr()const { return addr_; }
         void addr(const Address& a) { addr_ = a; }
 
