@@ -6,6 +6,11 @@
 class Address
 {
     public:
+        Address(): recordId_(0){};
+
+        int recordId() const {return recordId_;}
+        void recordId(int i){recordId_ = i;}
+
         std::string lastname() const {return lastname_;}
         void lastname(const std::string&);
 
@@ -19,6 +24,7 @@ class Address
         void address(const std::string&);
 
     private:
+        int recordId_;
         std::string lastname_;
         std::string firstname_;
         std::string phone_;
