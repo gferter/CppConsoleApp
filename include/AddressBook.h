@@ -4,6 +4,12 @@
 #include<list>
 #include "Address.h"
 
+bool operator==(const Address&, const Address&);
+bool operator<(const Address&, const Address&);
+
+#include<utility>
+using namespace std::rel_ops;
+
 class AddressBook
 {
     public:
