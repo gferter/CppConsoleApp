@@ -20,8 +20,12 @@ AddressBook::~AddressBook()
         recordId =  nextId_++;
       else if(recordId > nextId_)
         nextId_ = recordId + 1;
-      else if(getById(recordId) != notFound)
-        throw DuplicateId();
+      else
+      {
+          for(addrlist::iterator i = addresses_.begin(); i != addresses_.end(); ++i)
+            if(i->recordId() == recordId)
+                throw DuplicateId();
+      }
 
       addresses_.push_back(addr);
       addresses_.back().recordId(recordId);
@@ -29,54 +33,52 @@ AddressBook::~AddressBook()
       return recordId;
 }
 
+AddressBook::addrlist::iterator AddressBook::getById(int recordId)throw (AddressNotFound)
+{
+    for(addrlist::iterator i = addresses_.begin(); i != addresses_.end(); ++i)
+        if(i->recordId() == recordId)
+                return i;
+    throw AddressNotFound();
+}
+
+AddressBook::addrlist::const_iterator AddressBook::getById(int recordId)const throw (AddressNotFound)
+{
+    for(addrlist::const_iterator i = addresses_.begin(); i != addresses_.end(); ++i)
+        if(i->recordId() == recordId)
+                return i;
+    throw AddressNotFound();
+}
+
 void AddressBook::eraseAddress(int recordId)throw(AddressNotFound)
 {
-    int index = getById(recordId);
-    if(index == notFound)
-        throw AddressNotFound();
-
-    addresses_[index] = addresses_.back();
-    addresses_.pop_back();
+    addrlist::iterator i = getById(recordId);
+    addresses_.erase(i);
 }
 
 void AddressBook::replaceAddress(const Address& addr, int recordId)throw(AddressNotFound)
 {
     if(recordId == 0)
         recordId = addr.recordId();
-    int index = getById(recordId);
-    if(index == notFound)
-        throw AddressNotFound();
 
-    addresses_[index] = addr;
-    addresses_[index].recordId(recordId);
+     addrlist::iterator i = getById(recordId);
+
+    *i = addr;
+    i->recordId(recordId);
 }
 
 const Address& AddressBook::getAddress(int recordId) const throw(AddressNotFound)
 {
-    int index = getById(recordId);
-    if(index == notFound)
-        throw AddressNotFound();
-
-    return addresses_[index];
+    return *getById(recordId);
 }
 
 void AddressBook::print() const
 {
-     std::cout << "***************************************************\n";
-     for(int i = 0; i < addresses_.size(); ++i)
+     for(addrlist::const_iterator i = addresses_.begin(); i != addresses_.end(); ++i)
      {
-         const Address& a = addresses_[i];
+         const Address& a = *i;
          std::cout << "RecordId: " << a.recordId() << '\n'
                    << a.firstname() << ' ' << a.lastname() << '\n'
                    << a.address() << '\n' << a.phone() <<'\n'
                    << std::endl;
      }
-}
-
-int AddressBook::getById(int recordId) const
-{
-     for(int i = 0; i < addresses_.size(); ++i)
-        if(addresses_[i].recordId() == recordId)
-            return i;
-     return notFound;
 }

@@ -1,7 +1,7 @@
 #ifndef ADDRESSBOOK_H
 #define ADDRESSBOOK_H
 
-#include<vector>
+#include<list>
 #include "Address.h"
 
 class AddressBook
@@ -25,10 +25,12 @@ class AddressBook
         AddressBook& operator=(const AddressBook&);
 
         static int nextId_;
-        std::vector<Address> addresses_;
 
-        int getById(int recordId) const;
-        static const int notFound = -1;
+        typedef std::list<Address> addrlist;
+        addrlist addresses_;
+
+        addrlist::iterator getById(int recordId)throw (AddressNotFound);
+        addrlist::const_iterator getById(int recordId)const throw (AddressNotFound);
 };
 
 #endif // ADDRESSBOOK_H
